@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+</head>
+
+<body>
+    <form action="http://localhost:4000/upload" enctype="multipart/form-data" method="POST">
+        Select images: <input id="MBOXFile" name="mboxfile" type="file" accept=".mbox">
+        <button id="submitUpload" class="btn" type="submit">Submit</button>
+    </form>
+
+    <div>
+        <button id="Train Model">Train Model</button>
+    </div>
+
+    <script src="extension.js"></script>
+    <script src="UtilityFunctions.js"></script>
+</body>
+
+</html>
+

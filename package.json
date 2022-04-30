@@ -1,0 +1,40 @@
+{
+  "name": "phisherman",
+  "version": "1.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "deps": "npm install",
+    "stage": "mkdir dist || echo Dist already exists.",
+    "bundle": "browserify -o dist/gmailJsLoader.js src/gmailJsLoader.js && browserify -o dist/extension.js src/extension.js",
+    "build": "npm run stage && npm run bundle && node server"
+  },
+  "author": "Peter Sleith",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "body-parser": "^1.20.0",
+    "buffer": "^6.0.3",
+    "chalk": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "fast-csv": "^4.3.6",
+    "gmail-js": "^1.0.0",
+    "googleapis": "^100.0.0",
+    "jquery": "^3.3.1",
+    "mailparser": "^3.4.0",
+    "mbox-parser": "^1.0.1",
+    "mbox-reader": "^1.1.5",
+    "multer": "^1.4.4",
+    "node-fetch": "^3.2.3",
+    "node-mbox": "^1.0.0",
+    "objects-to-csv": "^1.3.6",
+    "python-shell": "^3.0.1",
+    "request": "^2.88.2",
+    "sanitize-html": "^2.7.0",
+    "stream": "^0.0.2"
+  },
+  "type": "module",
+  "devDependencies": {
+    "browserify": "17.0.0"
+  }
+}
