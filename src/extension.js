@@ -10,44 +10,51 @@ const loaderId = setInterval(() => {
     startExtension(window._gmailjs);
 }, 100);
 
-async function CheckURLIndex(){
-    user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-    let response = await fetch('info:https://www.google.com/search?' + new URLSearchParams({
-        url: 'https%3A%2F%2Fcareers.google.com%2Fjobs%2Fgoogle%2Ftechnical-writer'
-    }),
-    {
-        headers : { 'User-Agent' : user_agent}
-    })
 
-    let data = await response.text();
-    console.log(data);
-}
-
-
-
+//Calls the Content Analysis Classification functions on the Server-Side waits for a classification response
 async function fetchContentClassification(emailcontent) {
     let bodyContent = JSON.stringify({
         "data": emailcontent
     })
-    let response = await fetch('http://localhost:4000/CAClassify', {
+    let response = await fetch('http://localhost:5000/CAClassify', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: bodyContent
     });
-    let data = await response.text();
-    console.log(data);
+    let data = JSON.parse(await response.text())
+    return data
 }
 
+//Calls the URL Classification functions on the Server-Side waits for a classification response
+async function fetchURLClassification(rawHTML) {
+    var doc = document.createElement("html");
+    doc.innerHTML = rawHTML;
+    var links = doc.getElementsByTagName("a")
+    var urls = [];
 
-submitBtn=document.getElementById('submitUpload')
-submitBtn.onclick = function(e){
-    if (document.getElementById('MBOXFile').value != ''){
-        submitBtn.value='Submitted!'
+    for (var i=0; i<links.length; i++) {
+        if(links[i].getAttribute("href")){
+            urls.push(links[i].getAttribute("href"));
+        }
     }
-};
 
+    let bodyContent = JSON.stringify({
+        "data": urls
+    })
+    let response = await fetch('http://localhost:5000/URLClassify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: bodyContent
+    });
+    let data = JSON.parse(await response.text())
+    return data
+}
+
+//Function to extract plaintext from the HTML text returned by Gmail.js
 function extractContent(s, space) {
     var span= document.createElement('span');
     span.innerHTML= s;
@@ -63,27 +70,33 @@ function extractContent(s, space) {
     return [span.textContent || span.innerText].toString().replace(/ +/g,' ');
 };
 
+//Implementation of Gmail.js listeners
 async function startExtension(gmail) {
     console.log("Phisherman loading...");
     window.gmail = gmail;
 
-    gmail.observe.on("load", () => {
+    gmail.observe.on("load", async () => {
         //const userEmail = gmail.dom.visible_messages();
         console.log("Phisherman is injected and ready for use!");
-        //console.log(userEmail);
 
-        gmail.observe.on("view_email", (domEmail) => {
+        gmail.observe.on("view_email", async (domEmail) => {
             //console.log("Looking at email:", domEmail);
             const emailData = gmail.new.get.email_data(domEmail);
-            //console.log(emailData.content_html)
-            //console.log(extractContent(emailData.content_html))
-            CheckURLIndex()
-            //fetchContentClassification(extractContent(emailData.content_html, true))
-            //console.log("Email data:", emailData);
-        });
-
-        gmail.observe.on("compose", (compose) => {
-            console.log("New compose window is opened!", compose);
+            console.log(emailData.content_html)
+            let URLResult = await fetchURLClassification(emailData.content_html)
+            let CAResult 
+            if (URLResult.legit !== false){
+                CAResult = await fetchContentClassification(extractContent(emailData.content_html, true))
+                if ((URLResult.legit == true) && (CAResult.legit == true)){
+                    alert(URLResult.msg)
+                }
+                else if((URLResult.legit == true) && (CAResult.legit == false)){
+                    alert("The email content has been flagged as suspicious, but all links appear to be safe. Proceed with caution")
+                }
+                else if((URLResult.legit == null) && (CAResult.legit == true)){
+                    alert("This email has been flagged with suspicious links, but content appears legitimate. Proceed with caution when following links")
+                }
+            }
         });
     });
 }

@@ -3,17 +3,23 @@
 <head>
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <title>Calculator</title>
+    <title>Phisherman</title>
 </head>
 
 <body>
-    <form action="http://localhost:4000/upload" enctype="multipart/form-data" method="POST">
-        Select images: <input id="MBOXFile" name="mboxfile" type="file" accept=".mbox">
-        <button id="submitUpload" class="btn" type="submit">Submit</button>
+    <h3 id="UploadHeader">Upload a .mbox file:</h3>
+    <form id="test" action="http://localhost:5000/upload" enctype="multipart/form-data" method="POST">
+            Select File: <input id="MBOXFile" name="mboxfile" type="file" accept=".mbox">
+            <button id="submitUpload" class="btn" type="submit" >Upload</button>
     </form>
+    <div>
+        <h3 id="TrainHeader">Please upload a .mbox file before training.</h3>
+        <button id="TrainModel" disabled="true">Train Model</button>
+    </div>
 
     <div>
-        <button id="Train Model">Train Model</button>
+        <h3 id="DeleteHeader">Delete Your Data</h3>
+        <button id="DeleteUpload">Delete</button>
     </div>
 
     <script src="extension.js"></script>

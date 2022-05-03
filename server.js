@@ -1,10 +1,11 @@
 // server.js
-import express, { json, urlencoded } from "express";
+import express from "express";
 import multer from "multer";
 import path from 'path';
 import cors from 'cors';
-import { classifyText } from "./src/ContentAnalysisFunctions.js";
-import { LoadPhishtank, CheckPhishTank } from "./src/URLAnalysisFunctions.js";
+import fs from 'fs';
+import { classifyText, trainModel } from "./src/ContentAnalysisFunctions.js";
+import { LoadPhishtank, ClassifyURLs } from "./src/URLAnalysisFunctions.js";
 
 
 const storage = multer.diskStorage({
@@ -43,24 +44,33 @@ app.post('/upload', (req, res) => {
     })
 });
 
+
 app.post("/CAClassify", async (req,res)=>{
-    //console.log(req.body)
     res.send(await classifyText(req.body.data))
 })
 
 app.post("/URLClassify", async (req,res)=>{
-    urls = req.body.data
-    if (urls = ''){
-        res.send('0')
-    }
-    else
-    {
-
-    }
-
+    let content = req.body.data
+    res.send(await ClassifyURLs(content))
 })
 
-app.listen(4000, () => {
+app.post("/delete", async (req,res)=>{
+    fs.unlink('./uploads/uploadedMbox.mbox', function (err) {
+        if (err){
+            console.log("Delete Error: "+ err)
+            res.send("Unable to Delete Data")
+        }
+        else{
+            res.send("Data Successfully Deleted")
+        }
+    })
+})
+
+app.post("/train", async (req,res)=>{
+    res.send(await trainModel())
+})
+
+app.listen(5000, () => {
     LoadPhishtank();
     console.log(`Server started...`);
 });

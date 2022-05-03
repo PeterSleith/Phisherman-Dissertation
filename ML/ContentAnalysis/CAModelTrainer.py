@@ -73,13 +73,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 X_train, X_test, y_train, y_test = train_test_split(data['text'], data['label'], test_size=0.20, random_state=0)
 
-"""
-#BoW
-vectoriser = CountVectorizer()  
-X_train = vectoriser.fit_transform(X_train)
-X_test = vectoriser.transform(X_test)
-"""
-
 #TF-IDF
 vectoriser = TfidfVectorizer()
 X_train = vectoriser.fit_transform(X_train)
@@ -95,15 +88,8 @@ classifier = RandomForestClassifier(n_estimators=200,max_depth=None)
 classifier.fit(X_train, y_train.values.ravel())
 
 y_pred = classifier.predict(X_test)
-accuracy = round(accuracy_score(y_test,y_pred), 3)
-precision = round(precision_score(y_test,y_pred), 3)
-recall = round(recall_score(y_test,y_pred), 3)
 
-print('MAX DEPTH: {} / # OF EST: {} -- A: {} / P: {} / R: {}'.format(classifier.max_depth,
-                                                                     classifier.n_estimators,
-                                                                     accuracy,
-                                                                     precision,
-                                                                     recall))
+print("Model Trained")
 
 #-------------Export the Model & Vectoriser------------#
 import joblib
