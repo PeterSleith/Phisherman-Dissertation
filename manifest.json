@@ -21,6 +21,8 @@
         "default_popup": "src/Background.html"
     },
 
+    "options_page": "help.html",
+
     "web_accessible_resources": [{
         "resources": [
             "dist/gmailJsLoader.js",

@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.1.0/build/pure-min.css" integrity="sha384-yHIFVG6ClnONEA5yB5DJXfW2/KC173DIQrYoZMEtBvGzmf0PKiGyNEqe9N6BNDBH" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <title>Phisherman</title>
 </head>
 
 <body>
+    <div>
+        <h1 id="Title">Phisherman</h3>
+    </div>
     <h3 id="UploadHeader">Upload a .mbox file:</h3>
-    <form id="test" action="http://localhost:5000/upload" enctype="multipart/form-data" method="POST">
-            Select File: <input id="MBOXFile" name="mboxfile" type="file" accept=".mbox">
-            <button id="submitUpload" class="btn" type="submit" >Upload</button>
+    <form id="test" class="centering" action="http://localhost:5000/upload" enctype="multipart/form-data" method="POST">
+            Select File: <input class="centering" id="MBOXFile" name="mboxfile" type="file" accept=".mbox">
+            <button class="pure-button pure-button-primary" id="submitUpload" class="btn" type="submit" >Upload</button>
     </form>
     <div>
         <h3 id="TrainHeader">Please upload a .mbox file before training.</h3>
-        <button id="TrainModel" disabled="true">Train Model</button>
+        <button class="pure-button pure-button-primary" id="TrainModel" disabled="true">Train Model</button>
     </div>
 
     <div>
         <h3 id="DeleteHeader">Delete Your Data</h3>
-        <button id="DeleteUpload">Delete</button>
+        <button class="pure-button pure-button-primary" id="DeleteUpload">Delete</button>
+    </div>
+
+    <div class="paddedDiv">
+        <a href="help.html" target="_blank">Help</a>
     </div>
 
     <script src="extension.js"></script>
