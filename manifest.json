@@ -21,7 +21,7 @@
         "default_popup": "src/Background.html"
     },
 
-    "options_page": "help.html",
+    "options_page": "src/help.html",
 
     "web_accessible_resources": [{
         "resources": [
